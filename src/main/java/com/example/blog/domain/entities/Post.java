@@ -7,7 +7,9 @@ import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -34,6 +36,18 @@ public class Post {
 
     @Column(nullable = false)
     private Integer readingTime; // the idea is to calculate it once when saving the post, rather than every time the post is viewed
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", nullable = false)
+    private User author;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "post_tags", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private Set<Tag> tags = new HashSet<>(); // set here prevents duplicates
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
