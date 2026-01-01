@@ -2,6 +2,7 @@ package com.example.blog.mappers;
 
 import com.example.blog.domain.PostStatus;
 import com.example.blog.domain.dtos.CategoryDto;
+import com.example.blog.domain.dtos.CreateCategoryRequest;
 import com.example.blog.domain.entities.Category;
 import com.example.blog.domain.entities.Post;
 import org.mapstruct.Mapper;
@@ -20,6 +21,13 @@ public interface CategoryMapper {
      */
     @Mapping(source = "posts", target = "postCount", qualifiedByName = "calculatePostCount")
     CategoryDto toDto(Category category);
+
+    /**
+     * Maps a CreateCategoryRequest to a Category entity. Does not require the @Mapping annotation since we aren't computing any extra field. Mapstruct handles the mapping automatically. Our request only contains a string.
+     * @param createCategoryRequest A Bean validation class for an incoming create request
+     * @return A Category entity
+     */
+    Category toEntity(CreateCategoryRequest createCategoryRequest);
 
     /**
      * @param posts A list of posts for a particular Category
