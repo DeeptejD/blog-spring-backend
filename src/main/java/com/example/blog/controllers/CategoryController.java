@@ -8,11 +8,13 @@ import com.example.blog.services.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/api/v1/categories")
@@ -40,5 +42,11 @@ public class CategoryController {
         return ResponseEntity
                 .created(URI.create("/categories" + savedCategoryDto.getId()))
                 .body(savedCategoryDto);
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable UUID id) {
+        categoryService.deleteCategory(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT); // https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/204
     }
 }
