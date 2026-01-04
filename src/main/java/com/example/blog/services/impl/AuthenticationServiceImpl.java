@@ -1,6 +1,7 @@
 package com.example.blog.services.impl;
 
 import com.example.blog.services.AuthenticationService;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -49,8 +50,26 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .compact(); // this converts this to a String
     }
 
+    // this method is created so that it can be used in our custom filter
+    @Override
+    public UserDetails validateToken(String token) {
+        // extract username from token
+        String username = extractUsername(token);
+        return userDetailsService.loadUserByUsername(username);
+    }
+
     private Key getSigningKey() {
         byte[] keyBytes = secretKey.getBytes();
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private String extractUsername(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        // an exception will be thrown if the signing key wont match n all
+        return claims.getSubject(); // subject was our username
     }
 }
