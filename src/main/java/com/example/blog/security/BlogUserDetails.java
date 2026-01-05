@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * TL;DR: this bridges the gap between our applications 'User' and what Spring Security understands i.e. 'UserDetails'
@@ -53,5 +54,9 @@ public class BlogUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public UUID getId() {
+        return user.getId();
     }
 }
