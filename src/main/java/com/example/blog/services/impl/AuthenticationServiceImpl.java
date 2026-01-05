@@ -32,7 +32,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public UserDetails authenticate(String email, String password) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password)
+                new UsernamePasswordAuthenticationToken(email, password) // this line is required because the authenticationManager expects an 'Authentication' object. This way it has a common login process for all types of authentication methods, like OAuth, JWT etc.
         );
         // if the authentication fails and exception will be thrown, it will be caught by the exception handler we defined earlier
         return userDetailsService.loadUserByUsername(email);
@@ -45,7 +45,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis() + jwtExpiryMs))
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiryMs))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact(); // this converts this to a String
     }
