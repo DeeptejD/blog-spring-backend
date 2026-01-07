@@ -52,6 +52,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     // this method is created so that it can be used in our custom filter
+
     @Override
     public UserDetails validateToken(String token) {
         // extract username from token
