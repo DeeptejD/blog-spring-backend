@@ -1,7 +1,7 @@
 package com.example.blog.controllers;
 
 import com.example.blog.domain.dtos.CreateTagsRequest;
-import com.example.blog.domain.dtos.TagResponse;
+import com.example.blog.domain.dtos.TagDto;
 import com.example.blog.domain.entities.Tag;
 import com.example.blog.mappers.TagMapper;
 import com.example.blog.services.TagService;
@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,15 +22,15 @@ public class TagController {
     private final TagMapper tagMapper;
 
     @GetMapping
-    public ResponseEntity<List<TagResponse>> getAllTags() {
+    public ResponseEntity<List<TagDto>> getAllTags() {
         List<Tag> tags = tagService.getTags();
-        List<TagResponse> tagResponses = tags.stream().map(tagMapper::toTagResponse).toList();
-        return ResponseEntity.ok(tagResponses);
+        List<TagDto> tagRespons = tags.stream().map(tagMapper::toTagResponse).toList();
+        return ResponseEntity.ok(tagRespons);
     }
 
     @PostMapping
-    public ResponseEntity<List<TagResponse>> createTags(@RequestBody @Valid CreateTagsRequest createTagsRequest) {
-        List<TagResponse> createdTags = tagService.createTags(createTagsRequest.getNames())
+    public ResponseEntity<List<TagDto>> createTags(@RequestBody @Valid CreateTagsRequest createTagsRequest) {
+        List<TagDto> createdTags = tagService.createTags(createTagsRequest.getNames())
                 .stream().map(tagMapper::toTagResponse)
                 .toList();
 
