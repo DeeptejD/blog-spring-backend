@@ -110,6 +110,15 @@ public class PostServiceImpl implements PostService {
         return postRepository.save(existingPost);
     }
 
+    @Override
+    public void deletePost(UUID postId) {
+        if (postRepository.existsById(postId)) {
+            postRepository.deleteById(postId);
+        } else {
+            throw new EntityNotFoundException("Post with id " + postId + " not found");
+        }
+    }
+
 
     private int calculateReadingTime(String content) {
         // at this point we haven't checked if content is empty or NULL since we already added Bean validations on the incoming request
