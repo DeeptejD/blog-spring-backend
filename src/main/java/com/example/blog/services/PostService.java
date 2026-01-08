@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PostService {
-    List<Post> getAllPosts(UUID categoryId, UUID tagId);
-    List<Post> getDraftPostsByAuthor(User author);
+    List<Post> getAllPublishedPosts(UUID categoryId, UUID tagId);
+    List<Post> getAllDraftPostsByAuthor(User author);
 }

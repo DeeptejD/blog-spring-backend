@@ -18,27 +18,28 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
-    private final PostMapper postMapper;
     private final UserService userService;
 
+    private final PostMapper postMapper;
+
     @GetMapping
-    public ResponseEntity<List<PostDto>>  getAllPosts(
+    public ResponseEntity<List<PostDto>> getAllPublishedPosts(
             @RequestParam(required = false)UUID categoryId,
             @RequestParam(required = false)UUID tagId
     ) {
-        List<Post> posts = postService.getAllPosts(categoryId, tagId);
-        List<PostDto> postDtos = posts.stream().map(postMapper::toDto).toList();
-        return ResponseEntity.ok(postDtos);
+        List<Post> publishedPosts = postService.getAllPublishedPosts(categoryId, tagId);
+        List<PostDto> publishedPostsDtos = publishedPosts.stream().map(postMapper::toDto).toList();
+        return ResponseEntity.ok(publishedPostsDtos);
     }
 
     @GetMapping(path = "/drafts")
-    public ResponseEntity<List<PostDto>> getAllDrafts(@RequestAttribute UUID userId) {
+    public ResponseEntity<List<PostDto>> getAllDraftPosts(@RequestAttribute UUID userId) {
         // we haven't implemented authorization here, we are going to user the attribute set inside the jwt filter to filer draft posts
         User loggedInUser = userService.findUserById(userId);
-        List<Post> draftPosts = postService.getDraftPostsByAuthor(loggedInUser);
-        List<PostDto> draftPostDtos = draftPosts.stream()
+        List<Post> draftPostsByAuthor = postService.getAllDraftPostsByAuthor(loggedInUser);
+        List<PostDto> draftPostsByAuthorDtos = draftPostsByAuthor.stream()
                 .map(postMapper::toDto)
                 .toList();
-        return ResponseEntity.ok(draftPostDtos);
+        return ResponseEntity.ok(draftPostsByAuthorDtos);
     }
 }
