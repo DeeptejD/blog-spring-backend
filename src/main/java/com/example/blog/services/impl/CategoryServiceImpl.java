@@ -6,7 +6,6 @@ import com.example.blog.services.CategoryService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,7 +46,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category findCategoryById(UUID id) {
+    public Category getById(UUID id) {
         return categoryRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Category with id " + id + " not found")
         );
