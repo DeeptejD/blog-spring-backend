@@ -1,8 +1,10 @@
 package com.example.blog.controllers;
 
 import com.example.blog.domain.CreatePostRequest;
+import com.example.blog.domain.UpdatePostRequest;
 import com.example.blog.domain.dtos.CreatePostRequestDto;
 import com.example.blog.domain.dtos.PostDto;
+import com.example.blog.domain.dtos.UpdatePostRequestDto;
 import com.example.blog.domain.entities.Post;
 import com.example.blog.domain.entities.User;
 import com.example.blog.mappers.PostMapper;
@@ -49,6 +51,12 @@ public class PostController {
         return ResponseEntity.ok(draftPostsByAuthorDtos);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<PostDto> getPostById(@PathVariable UUID id) {
+        Post postById = postService.getPostById(id);
+        return ResponseEntity.ok(postMapper.toDto(postById));
+    }
+
     @PostMapping
     public ResponseEntity<PostDto> createPost(
             @RequestAttribute UUID userId,
@@ -65,5 +73,16 @@ public class PostController {
                 postMapper.toDto(createdPost),
                 HttpStatus.CREATED
         );
+    }
+
+    // NOTE: this is a FULL UPDATE
+    @PutMapping("/{id}")
+    public ResponseEntity<PostDto> updatePost(
+            @PathVariable UUID id,
+            @Valid @RequestBody UpdatePostRequestDto  updatePostRequestDto
+            ) {
+        UpdatePostRequest updatePostRequest = postMapper.toUpdatePostRequest(updatePostRequestDto);
+        Post updatedPost = postService.updatePost(id, updatePostRequest);
+        return ResponseEntity.ok(postMapper.toDto(updatedPost));
     }
 }

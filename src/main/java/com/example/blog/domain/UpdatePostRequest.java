@@ -13,7 +13,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreatePostRequest {
+public class UpdatePostRequest {
+    private UUID id;
+
     private String title;
 
     private String content;

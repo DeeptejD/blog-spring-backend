@@ -13,14 +13,14 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-/**
- * This DTO represents the structure of the incoming JSON that hits the create post endpoint
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreatePostRequestDto {
+public class UpdatePostRequestDto {
+    @NotNull(message = "Post ID is required")
+    private UUID id;
+
     @NotBlank(message = "Title cant be blank") // @NotBlank checks if the length AFTER trim is != 0, unlike @NotEmpty which does not perform the trim
     @Size(min = 3, max = 200, message = "Title must be between {min} and {max} characters.")
     private String title;
